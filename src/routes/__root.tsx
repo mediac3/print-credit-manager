@@ -79,12 +79,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "PrintPin — Gestión de pines de impresión" },
+      { title: "PrintPin — Gestión de tarjetas de servicio" },
       { name: "description", content: "Sistema de venta y gestión de pines de impresión con planes Bronce, Plata y Oro." },
-      { property: "og:title", content: "PrintPin" },
-      { property: "og:description", content: "Vende y gestiona pines de impresión con saldo prepagado." },
+      { property: "og:title", content: "PrintPin — Gestión de tarjetas de servicio" },
+      { property: "og:description", content: "Sistema de venta y gestión de pines de impresión con planes Bronce, Plata y Oro." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "PrintPin — Gestión de tarjetas de servicio" },
+      { name: "twitter:description", content: "Sistema de venta y gestión de pines de impresión con planes Bronce, Plata y Oro." },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/A9bcU1P6FJeRoYKvTYQfe60dAWv2/social-images/social-1782172751235-logo_copyexpress.webp" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/A9bcU1P6FJeRoYKvTYQfe60dAWv2/social-images/social-1782172751235-logo_copyexpress.webp" },
     ],
     links: [
       {
