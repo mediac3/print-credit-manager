@@ -14,16 +14,271 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      pins: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          estado: Database["public"]["Enums"]["pin_estado"]
+          id: string
+          password_hash: string
+          plan_id: string
+          saldo_actual: number
+          saldo_inicial: number
+          usuario: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          estado?: Database["public"]["Enums"]["pin_estado"]
+          id?: string
+          password_hash: string
+          plan_id: string
+          saldo_actual?: number
+          saldo_inicial?: number
+          usuario: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          estado?: Database["public"]["Enums"]["pin_estado"]
+          id?: string
+          password_hash?: string
+          plan_id?: string
+          saldo_actual?: number
+          saldo_inicial?: number
+          usuario?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pins_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      plans: {
+        Row: {
+          activo: boolean
+          created_at: string
+          descripcion: string | null
+          id: string
+          nombre: string
+          precio_venta: number
+          saldo_inicial: number
+        }
+        Insert: {
+          activo?: boolean
+          created_at?: string
+          descripcion?: string | null
+          id?: string
+          nombre: string
+          precio_venta?: number
+          saldo_inicial?: number
+        }
+        Update: {
+          activo?: boolean
+          created_at?: string
+          descripcion?: string | null
+          id?: string
+          nombre?: string
+          precio_venta?: number
+          saldo_inicial?: number
+        }
+        Relationships: []
+      }
+      print_jobs: {
+        Row: {
+          cantidad_paginas: number
+          costo_total: number
+          costo_unitario: number
+          created_at: string
+          id: string
+          pin_id: string
+          registrado_por: string | null
+          saldo_restante: number
+          tipo_impresion: string
+        }
+        Insert: {
+          cantidad_paginas: number
+          costo_total: number
+          costo_unitario: number
+          created_at?: string
+          id?: string
+          pin_id: string
+          registrado_por?: string | null
+          saldo_restante: number
+          tipo_impresion: string
+        }
+        Update: {
+          cantidad_paginas?: number
+          costo_total?: number
+          costo_unitario?: number
+          created_at?: string
+          id?: string
+          pin_id?: string
+          registrado_por?: string | null
+          saldo_restante?: number
+          tipo_impresion?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "print_jobs_pin_id_fkey"
+            columns: ["pin_id"]
+            isOneToOne: false
+            referencedRelation: "pins"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      print_prices: {
+        Row: {
+          id: string
+          plan_id: string
+          precio_pagina: number
+          tipo: string
+        }
+        Insert: {
+          id?: string
+          plan_id: string
+          precio_pagina: number
+          tipo: string
+        }
+        Update: {
+          id?: string
+          plan_id?: string
+          precio_pagina?: number
+          tipo?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "print_prices_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string | null
+          id: string
+          nombre: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          id: string
+          nombre?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          nombre?: string
+        }
+        Relationships: []
+      }
+      sales: {
+        Row: {
+          cliente_nombre: string | null
+          cliente_telefono: string
+          created_at: string
+          id: string
+          pin_id: string
+          precio_venta: number
+          vendido_por: string | null
+        }
+        Insert: {
+          cliente_nombre?: string | null
+          cliente_telefono: string
+          created_at?: string
+          id?: string
+          pin_id: string
+          precio_venta: number
+          vendido_por?: string | null
+        }
+        Update: {
+          cliente_nombre?: string | null
+          cliente_telefono?: string
+          created_at?: string
+          id?: string
+          pin_id?: string
+          precio_venta?: number
+          vendido_por?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sales_pin_id_fkey"
+            columns: ["pin_id"]
+            isOneToOne: false
+            referencedRelation: "pins"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      register_print: {
+        Args: {
+          _paginas: number
+          _pin_id: string
+          _tipo: string
+          _user: string
+        }
+        Returns: {
+          cantidad_paginas: number
+          costo_total: number
+          costo_unitario: number
+          created_at: string
+          id: string
+          pin_id: string
+          registrado_por: string | null
+          saldo_restante: number
+          tipo_impresion: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "print_jobs"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "cajero"
+      pin_estado: "disponible" | "vendido" | "agotado" | "inactivo"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +405,9 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "cajero"],
+      pin_estado: ["disponible", "vendido", "agotado", "inactivo"],
+    },
   },
 } as const
