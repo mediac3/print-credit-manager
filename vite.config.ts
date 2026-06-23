@@ -13,6 +13,7 @@ export default defineConfig({
     server: { entry: "server" },
     spa: {
       enabled: true,
+      maskPath: "/auth",
       prerender: { outputPath: "/index.html" },
     },
   },
