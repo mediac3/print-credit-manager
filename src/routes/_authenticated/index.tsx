@@ -5,6 +5,7 @@ import { getDashboardStats } from "@/lib/pins.functions";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { DollarSign, ShoppingCart, Printer, Package } from "lucide-react";
+import { useAuth } from "@/lib/auth-context";
 import {
   ResponsiveContainer,
   LineChart,
@@ -23,6 +24,7 @@ const fmt = new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP",
 
 function DashboardPage() {
   const fn = useServerFn(getDashboardStats);
+  const { isAdmin } = useAuth();
   const { data, isLoading } = useQuery({
     queryKey: ["dashboard"],
     queryFn: () => fn(),
@@ -41,13 +43,13 @@ function DashboardPage() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-4">
-        <StatCard label="Ingresos hoy (ventas)" value={fmt.format(data.ingresos_hoy)} icon={<DollarSign className="h-4 w-4" />} />
+        {isAdmin && <StatCard label="Ingresos hoy (ventas)" value={fmt.format(data.ingresos_hoy)} icon={<DollarSign className="h-4 w-4" />} />}
         <StatCard label="Ventas hoy" value={String(data.ventas_hoy)} icon={<ShoppingCart className="h-4 w-4" />} />
         <StatCard label="Impresiones hoy" value={String(data.impresiones_hoy)} icon={<Printer className="h-4 w-4" />} />
-        <StatCard label="Cobrado en impresión" value={fmt.format(data.ingresos_impresion_hoy)} icon={<DollarSign className="h-4 w-4" />} />
+        {isAdmin && <StatCard label="Cobrado en impresión" value={fmt.format(data.ingresos_impresion_hoy)} icon={<DollarSign className="h-4 w-4" />} />}
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-3">
+      {isAdmin && (<div className="grid gap-4 lg:grid-cols-3">
         <Card className="lg:col-span-2">
           <CardHeader>
             <CardTitle>Ventas últimos 7 días</CardTitle>
@@ -90,9 +92,9 @@ function DashboardPage() {
             )}
           </CardContent>
         </Card>
-      </div>
+      </div>)}
 
-      <Card>
+      {isAdmin && (<Card>
         <CardHeader>
           <CardTitle>Ventas recientes</CardTitle>
         </CardHeader>
@@ -136,7 +138,7 @@ function DashboardPage() {
             </table>
           </div>
         </CardContent>
-      </Card>
+      </Card>)}
     </div>
   );
 }

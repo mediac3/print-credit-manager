@@ -27,17 +27,6 @@ type Price = { id: string; plan_id: string; tipo: string; precio_pagina: number 
 function PlanesPage() {
   const qc = useQueryClient();
   const { isAdmin, rolesLoading } = useAuth();
-
-  if (!rolesLoading && !isAdmin) {
-    return (
-      <div className="max-w-md mx-auto mt-12 text-center space-y-2 text-muted-foreground">
-        <Lock className="h-8 w-8 mx-auto" />
-        <h2 className="text-lg font-semibold text-foreground">Acceso restringido</h2>
-        <p className="text-sm">Solo los administradores pueden gestionar planes y tarifas.</p>
-      </div>
-    );
-  }
-
   const plansQ = useQuery({
     queryKey: ["plans"],
     queryFn: async () => {
@@ -56,6 +45,16 @@ function PlanesPage() {
   });
 
   const [newPlan, setNewPlan] = useState({ nombre: "", saldo_inicial: 0, precio_venta: 0 });
+
+  if (!rolesLoading && !isAdmin) {
+    return (
+      <div className="max-w-md mx-auto mt-12 text-center space-y-2 text-muted-foreground">
+        <Lock className="h-8 w-8 mx-auto" />
+        <h2 className="text-lg font-semibold text-foreground">Acceso restringido</h2>
+        <p className="text-sm">Solo los administradores pueden gestionar planes y tarifas.</p>
+      </div>
+    );
+  }
 
   async function addPlan() {
     if (!newPlan.nombre) return toast.error("Nombre requerido");
