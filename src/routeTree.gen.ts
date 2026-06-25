@@ -13,6 +13,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
 import { Route as AuthenticatedVentasRouteImport } from './routes/_authenticated/ventas'
+import { Route as AuthenticatedUsuariosRouteImport } from './routes/_authenticated/usuarios'
 import { Route as AuthenticatedPlanesRouteImport } from './routes/_authenticated/planes'
 import { Route as AuthenticatedPinesRouteImport } from './routes/_authenticated/pines'
 import { Route as AuthenticatedImpresionesRouteImport } from './routes/_authenticated/impresiones'
@@ -34,6 +35,11 @@ const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
 const AuthenticatedVentasRoute = AuthenticatedVentasRouteImport.update({
   id: '/ventas',
   path: '/ventas',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedUsuariosRoute = AuthenticatedUsuariosRouteImport.update({
+  id: '/usuarios',
+  path: '/usuarios',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedPlanesRoute = AuthenticatedPlanesRouteImport.update({
@@ -59,6 +65,7 @@ export interface FileRoutesByFullPath {
   '/impresiones': typeof AuthenticatedImpresionesRoute
   '/pines': typeof AuthenticatedPinesRoute
   '/planes': typeof AuthenticatedPlanesRoute
+  '/usuarios': typeof AuthenticatedUsuariosRoute
   '/ventas': typeof AuthenticatedVentasRoute
 }
 export interface FileRoutesByTo {
@@ -66,6 +73,7 @@ export interface FileRoutesByTo {
   '/impresiones': typeof AuthenticatedImpresionesRoute
   '/pines': typeof AuthenticatedPinesRoute
   '/planes': typeof AuthenticatedPlanesRoute
+  '/usuarios': typeof AuthenticatedUsuariosRoute
   '/ventas': typeof AuthenticatedVentasRoute
   '/': typeof AuthenticatedIndexRoute
 }
@@ -76,14 +84,29 @@ export interface FileRoutesById {
   '/_authenticated/impresiones': typeof AuthenticatedImpresionesRoute
   '/_authenticated/pines': typeof AuthenticatedPinesRoute
   '/_authenticated/planes': typeof AuthenticatedPlanesRoute
+  '/_authenticated/usuarios': typeof AuthenticatedUsuariosRoute
   '/_authenticated/ventas': typeof AuthenticatedVentasRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/impresiones' | '/pines' | '/planes' | '/ventas'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/impresiones'
+    | '/pines'
+    | '/planes'
+    | '/usuarios'
+    | '/ventas'
   fileRoutesByTo: FileRoutesByTo
-  to: '/auth' | '/impresiones' | '/pines' | '/planes' | '/ventas' | '/'
+  to:
+    | '/auth'
+    | '/impresiones'
+    | '/pines'
+    | '/planes'
+    | '/usuarios'
+    | '/ventas'
+    | '/'
   id:
     | '__root__'
     | '/_authenticated'
@@ -91,6 +114,7 @@ export interface FileRouteTypes {
     | '/_authenticated/impresiones'
     | '/_authenticated/pines'
     | '/_authenticated/planes'
+    | '/_authenticated/usuarios'
     | '/_authenticated/ventas'
     | '/_authenticated/'
   fileRoutesById: FileRoutesById
@@ -130,6 +154,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedVentasRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/usuarios': {
+      id: '/_authenticated/usuarios'
+      path: '/usuarios'
+      fullPath: '/usuarios'
+      preLoaderRoute: typeof AuthenticatedUsuariosRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/planes': {
       id: '/_authenticated/planes'
       path: '/planes'
@@ -158,6 +189,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedImpresionesRoute: typeof AuthenticatedImpresionesRoute
   AuthenticatedPinesRoute: typeof AuthenticatedPinesRoute
   AuthenticatedPlanesRoute: typeof AuthenticatedPlanesRoute
+  AuthenticatedUsuariosRoute: typeof AuthenticatedUsuariosRoute
   AuthenticatedVentasRoute: typeof AuthenticatedVentasRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
 }
@@ -166,6 +198,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedImpresionesRoute: AuthenticatedImpresionesRoute,
   AuthenticatedPinesRoute: AuthenticatedPinesRoute,
   AuthenticatedPlanesRoute: AuthenticatedPlanesRoute,
+  AuthenticatedUsuariosRoute: AuthenticatedUsuariosRoute,
   AuthenticatedVentasRoute: AuthenticatedVentasRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
 }
