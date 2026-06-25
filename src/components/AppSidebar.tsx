@@ -24,18 +24,19 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth-context";
 
 const items = [
-  { title: "Dashboard", url: "/", icon: LayoutDashboard },
-  { title: "Pines", url: "/pines", icon: Package },
-  { title: "Planes y tarifas", url: "/planes", icon: Tag },
-  { title: "Vender pin", url: "/ventas", icon: ShoppingCart },
-  { title: "Registrar impresión", url: "/impresiones", icon: Printer },
+  { title: "Dashboard", url: "/", icon: LayoutDashboard, adminOnly: false },
+  { title: "Pines", url: "/pines", icon: Package, adminOnly: false },
+  { title: "Planes y tarifas", url: "/planes", icon: Tag, adminOnly: true },
+  { title: "Vender pin", url: "/ventas", icon: ShoppingCart, adminOnly: false },
+  { title: "Registrar impresión", url: "/impresiones", icon: Printer, adminOnly: false },
 ] as const;
 
 export function AppSidebar() {
   const { state } = useSidebar();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const { signOut, user } = useAuth();
+  const { signOut, user, isAdmin, roles } = useAuth();
   const collapsed = state === "collapsed";
+  const visibleItems = items.filter((i) => !i.adminOnly || isAdmin);
 
   return (
     <Sidebar collapsible="icon">
@@ -52,7 +53,7 @@ export function AppSidebar() {
           <SidebarGroupLabel>Operación</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => {
+              {visibleItems.map((item) => {
                 const active = pathname === item.url;
                 return (
                   <SidebarMenuItem key={item.url}>
@@ -71,7 +72,10 @@ export function AppSidebar() {
       </SidebarContent>
       <SidebarFooter>
         {!collapsed && user && (
-          <div className="px-2 pb-1 text-xs text-sidebar-foreground/70 truncate">{user.email}</div>
+          <div className="px-2 pb-1 truncate">
+            <div className="text-xs text-sidebar-foreground/70 truncate">{user.email}</div>
+            <div className="text-[10px] uppercase tracking-wide text-sidebar-foreground/50">{roles.join(", ") || "sin rol"}</div>
+          </div>
         )}
         <Button
           variant="ghost"

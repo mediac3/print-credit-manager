@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/dialog";
 import { Upload, Plus, Download } from "lucide-react";
 import { toast } from "sonner";
+import { useAuth } from "@/lib/auth-context";
 
 export const Route = createFileRoute("/_authenticated/pines")({
   component: PinesPage,
@@ -36,6 +37,7 @@ const fmt = new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP",
 
 function PinesPage() {
   const qc = useQueryClient();
+  const { isAdmin } = useAuth();
   const importFn = useServerFn(importPins);
   const createFn = useServerFn(createPin);
   const [filterPlan, setFilterPlan] = useState<string>("all");
@@ -139,6 +141,7 @@ function PinesPage() {
           <p className="text-sm text-muted-foreground">Inventario de pines de impresión</p>
         </div>
         <div className="flex gap-2">
+        {isAdmin && (<>
           <Dialog open={importOpen} onOpenChange={setImportOpen}>
             <DialogTrigger asChild>
               <Button variant="outline"><Upload className="h-4 w-4 mr-1" />Importar Excel</Button>
@@ -204,6 +207,7 @@ function PinesPage() {
               <DialogFooter><Button onClick={submitCreate}>Crear</Button></DialogFooter>
             </DialogContent>
           </Dialog>
+        </>)}
         </div>
       </div>
 
