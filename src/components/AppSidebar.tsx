@@ -5,6 +5,7 @@ import {
   Tag,
   ShoppingCart,
   Printer,
+  Users,
   LogOut,
 } from "lucide-react";
 import {
@@ -29,6 +30,7 @@ const items = [
   { title: "Planes y tarifas", url: "/planes", icon: Tag, adminOnly: true },
   { title: "Vender pin", url: "/ventas", icon: ShoppingCart, adminOnly: false },
   { title: "Registrar impresión", url: "/impresiones", icon: Printer, adminOnly: false },
+  { title: "Usuarios", url: "/usuarios", icon: Users, adminOnly: true },
 ] as const;
 
 export function AppSidebar() {
