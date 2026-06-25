@@ -20,6 +20,11 @@ export const importPins = createServerFn({ method: "POST" })
       .from("plans")
       .select("id,nombre,saldo_inicial");
     if (pErr) throw new Error(pErr.message);
+    const { data: isAdmin } = await context.supabase.rpc("has_role", {
+      _user_id: context.userId,
+      _role: "admin",
+    });
+    if (!isAdmin) throw new Error("Solo administradores pueden importar pines");
     const planMap = new Map(
       (plans ?? []).map((p) => [p.nombre.toLowerCase(), p]),
     );
@@ -74,6 +79,11 @@ export const createPin = createServerFn({ method: "POST" })
   )
   .handler(async ({ data, context }) => {
     const bcrypt = (await import("bcryptjs")).default;
+    const { data: isAdmin } = await context.supabase.rpc("has_role", {
+      _user_id: context.userId,
+      _role: "admin",
+    });
+    if (!isAdmin) throw new Error("Solo administradores pueden crear pines");
     const { data: plan, error: pErr } = await context.supabase
       .from("plans")
       .select("saldo_inicial")
