@@ -6,8 +6,9 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Plus, Trash2, Save } from "lucide-react";
+import { Plus, Trash2, Save, Lock } from "lucide-react";
 import { toast } from "sonner";
+import { useAuth } from "@/lib/auth-context";
 
 export const Route = createFileRoute("/_authenticated/planes")({
   component: PlanesPage,
@@ -25,6 +26,18 @@ type Price = { id: string; plan_id: string; tipo: string; precio_pagina: number 
 
 function PlanesPage() {
   const qc = useQueryClient();
+  const { isAdmin, rolesLoading } = useAuth();
+
+  if (!rolesLoading && !isAdmin) {
+    return (
+      <div className="max-w-md mx-auto mt-12 text-center space-y-2 text-muted-foreground">
+        <Lock className="h-8 w-8 mx-auto" />
+        <h2 className="text-lg font-semibold text-foreground">Acceso restringido</h2>
+        <p className="text-sm">Solo los administradores pueden gestionar planes y tarifas.</p>
+      </div>
+    );
+  }
+
   const plansQ = useQuery({
     queryKey: ["plans"],
     queryFn: async () => {
